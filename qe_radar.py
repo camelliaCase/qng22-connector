@@ -11,6 +11,8 @@ DEV = "/dev"
 TEST = "/test"
 BOARD = "/results"
 
+auth = ""
+
 #Directly calls dev_sim() in qe_radar
 def dev_sim(pulse, detect, example):
     #creates JSON form data for HTTP request
@@ -33,6 +35,7 @@ def dev_data(example):
     #return to user the actual value of the request, removing header and online data that is unneeded
     return r.text
 
+
 #Directly calls test_sim() in qe_radar
 def test_sim(pulse, detect, example):
     #creates JSON form data for HTTP request
@@ -44,6 +47,18 @@ def test_sim(pulse, detect, example):
     #return to user the actual value of the request, removing header and online data that is unneeded
     return r.text
 
+#packages the two arrays, config and score into a post and sends to server to be validated
+def test_score(complete_config, complete_score):
+    payload = {"configs":complete_config, "scores":complete_score}
+
+    r = requests.post(URL+TEST+"/score", data=payload)
+
+    return r.text
+    #needs to be setup to export as array
+
 #Exists for Testing
 #d = dev_sim(test_pulse, test_detect, test_example)
 #print(d)
+
+def set_auth(authstring):
+    auth = authstring
