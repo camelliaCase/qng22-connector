@@ -32,7 +32,7 @@ In `test`, the dataset is unknown, this is because you will score on this datase
 
 ## Development Phase
 
-`dev_sim (pulse, detect, example)`
+### dev_sim (pulse, detect, example)
 #### Example:
 Running the development simulation against target `81` with a pulse that runs from `0 us` to `10 us` and measures from `3 us` to `7 us`.
 ```python
@@ -45,7 +45,7 @@ x = qe_radar.dev_sim(pulse, detect, 81)
 # where x is a result between 0 and 1
 ```
 
-`dev_data(example)`
+### dev_data(example)
 #### Example:
 Finding the actual info of the development target `1`
 ```python
@@ -55,7 +55,7 @@ x = qe_radar.dev_data(1)
 # x is (Rabi Frequency [Mrad/s], Doppler shift of returned pulse [Mrad/s], Time of flight of pulse in us)
 ```
 
-`dev_score`
+### dev_score()
 #### Example:
 To provide an accuracy measurement for Teams so they can understand the scoring system and how they need to format their submission.
 ```python
@@ -76,7 +76,7 @@ x = qe_radar.dev_score()
 
 ## Testing Phase
 
-`test_sim`
+### test_sim()
 #### Example:
 Running the assessed simulation against target `34` with a pulse that runs from `12 us` to `18 us` and measures from `13 us` to `17 us`.
 ```python
@@ -89,7 +89,7 @@ x = qe_radar.test_sim(pulse, detect, 34)
 # where x is a result between 0 and 1
 ```
 
-`test_score`
+### test_score()
 #### Example:
 Scoring the calculated test and ensuring config is accurate.
 ```python
