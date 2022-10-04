@@ -1,3 +1,5 @@
+Version Number `0.2`
+
 # Introduction 
 Welcome to the Quantum Next Generation 2022 Radar Challenge Beta Phase. I hope you are as excited to tinker with this as I was to build it.
 The follow document will contain key information that will ensure the you have a thorough understanding about how the challenge works from a technical perspective and ensure that in the event of issue, the reasoning for it should be easy to understand and work around.
@@ -19,17 +21,14 @@ import qe_radar
 This will allow you to run the functions listed in `Documentation` that will easily help you engage with the server.
 
 ## Software Dependencies
-As mentioned, the `qe_radar.py` is a preconfigured wrapper for the `request` module, which will need to be imported so you can engage with the simulator.
-
-## Latest Releases
-Version Number `0.2`
+As mentioned, the `qe_radar.py` is a preconfigured wrapper for the `request` module, which will need to be installed so you can engage with the simulator.
 
 # Documentation
 #### Development vs Testing
 In qe_radar there are two prefixes that determine which dataset you will be targeting with any function.
 `dev` and `test`
 In `dev`, the dataset is known to you, and can be gathered using the `dev_data()` function. This is to encourage building and refining accurate models.
-In `test`, the dataset is unknown, this is because you are score on this dataset, and thus will only ever know how close you are on average to ensure it is the technique is being measured, and not a fabrication/repilcation of the data.
+In `test`, the dataset is unknown, this is because you will score on this dataset, and thus should only know how close you are on average to ensure it is your technique that is being measured, and not a replication of the actual data.
 
 ## Development Phase
 
@@ -42,7 +41,7 @@ import qe_radar
 pulse = [0,10]
 detect = [3,7]
 
-x = qe.radar.dev_sim(pulse, detect, 81)
+x = qe_radar.dev_sim(pulse, detect, 81)
 # where x is a result between 0 and 1
 ```
 
@@ -52,8 +51,27 @@ Finding the actual info of the development target `1`
 ```python
 import qe_radar
 
-x = qe.radar.dev_data(1)
+x = qe_radar.dev_data(1)
 # x is (Rabi Frequency [Mrad/s], Doppler shift of returned pulse [Mrad/s], Time of flight of pulse in us)
+```
+
+`dev_score`
+#### Example:
+To provide an accuracy measurement for Teams so they can understand the scoring system and how they need to format their submission.
+```python
+import qe_radar
+
+pulses = [[0,10],[10,15],[18,45]...]
+detects = [[2,8],[14,15],[30,40]...]
+examples = [0,1,2,3...]
+configs = [pulses, detects, examples]
+
+score = [] #need help with example data
+
+x = qe_radar.test_score(configs, scores)
+# x is [error code, accuracy average, error std for all three stats]
+
+x = qe_radar.dev_score()
 ```
 
 ## Testing Phase
@@ -67,7 +85,7 @@ import qe_radar
 pulse = [12,18]
 detect = [13,17]
 
-x = qe.radar.test_sim(pulse, detect, 34)
+x = qe_radar.test_sim(pulse, detect, 34)
 # where x is a result between 0 and 1
 ```
 
@@ -79,14 +97,13 @@ import qe_radar
 
 pulses = [[0,10],[10,15],[18,45]...]
 detects = [[2,8],[14,15],[30,40]...]
-example = 0
-configs = []
+examples = [0,1,2,3...]
+configs = [pulses, detects, examples]
 
-for i in 1000:
-    configs.append([pulses,detects,example])
+score = [] #need help with example data
 
-x = qe.radar.test_score(configs, scores)
-# x is (Rabi Frequency [Mrad/s], Doppler shift of returned pulse [Mrad/s], Time of flight of pulse in us)
+x = qe_radar.test_score(configs, scores)
+# x is [error code, accuracy average, error std for all three stats]
 ```
 
 # Build and Test
