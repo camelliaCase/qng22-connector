@@ -73,7 +73,7 @@ x = qe.radar.test_sim(pulse, detect, 34)
 
 `test_score`
 #### Example:
-Finding the actual info of the development target `1`
+Scoring the calculated test and ensuring config is accurate.
 ```python
 import qe_radar
 
