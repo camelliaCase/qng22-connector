@@ -11,6 +11,13 @@ This system of keeping the simulator online will allow us to have the core opera
 
 # Getting Started
 
+1. Understand the Challenge
+2. Read FAQ and Resources
+3. Download Python Package and Technical Guide
+4. Develop your solution using the simulator
+5. Test and validate your solution
+6. Submit your solution results
+
 ## Installation Process
 This package can be imported into any python script and used with ease. Outlined in this readme will be the functions you need to call to invoke behviours in the simulator, and explanations about their parameters, their returns, and their place in the larger challenge.
 
