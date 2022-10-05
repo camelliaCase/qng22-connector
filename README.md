@@ -15,24 +15,29 @@ This system of keeping the simulator online will allow us to have the core opera
 2. Read FAQ and Resources
 3. Download Python Package and Technical Guide
 4. Develop your solution using the simulator
-5. Test and validate your solution
-6. Submit your solution results
+5. Test and validate your results
+6. Submit your results
+7. Pitch your solution
 
 ## Installation Process
-This package can be imported into any python script and used with ease. Outlined in this readme will be the functions you need to call to invoke behviours in the simulator, and explanations about their parameters, their returns, and their place in the larger challenge.
+This package can be imported into any python script and used with ease. Outlined in this readme will be the functions you need to call to invoke behviours in the simulator, explanations about their parameters, their returns, and their place in the larger challenge.
 
-To install this package simply place this file with your project and write this into your solution:
+To install this package simply place this file with your project and input this into your solution:
 ```python
 import qe_radar
 ```
 This will allow you to run the functions listed in `Documentation` that will easily help you engage with the server.
 
 ## Software Dependencies
-As mentioned, the `qe_radar.py` is a preconfigured wrapper for the `request` module, which will need to be installed so you can engage with the simulator.
+As mentioned, the `qe_radar.py` is a preconfigured wrapper for the `requests` module, which will need to be installed so you can engage with the simulator.
+You can install `requests` using pip
+```
+python -m pip install requests
+```
 
 # Documentation
 #### Development vs Testing
-In qe_radar there are two prefixes that determine which dataset you will be targeting with any function.
+In `qe_radar` there are two prefixes that determine which dataset you will be targeting with any function.
 `dev` and `test`
 In `dev`, the example targets are known to you, and can be gathered using the `dev_data()` function. This is to encourage building and refining accurate models.
 In `test`, the example targets are unknown, this is because you will score on this dataset, and thus should only know how close you are on average to ensure it is your technique that is being measured, and not the replication of the actual data.
