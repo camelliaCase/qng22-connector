@@ -7,7 +7,7 @@ import numpy as np
 RADAR_WINDOW = 1000
 
 # Apply the token granted to a team so they may use the simulator
-qe.set_auth("")
+qe.set_auth("ugnwh38hgja111ppdawf")
 
 
 ##################################################
@@ -24,26 +24,25 @@ def create_example_map(example):
     det_start = 0
     #end of detection window
     det_start = det_start + np.random.randint(0, 100)
-
     #if detection window starts at TOTAL, end
     #if detection window ends past TOTAL, shrink window and check again
-
-
+    random_simulate(0, example)
     
     #create 3d model of the map, pulse size, detect size, normal size as the axis
     return 0
 
-def simulate(time, example):
-    return qe.dev_sim()
+def random_simulate(time, example):
+    #something happens in here about building a pulse and detection, randomly for now.
+    return random_simulate(time,example).append(qe.dev_sim(time, example))
 
 #   Build a normal map off all examples
 def build_dataset():
     return 0
 
-def build_data_model():
+#   Take a normal map and visualise it
+def visualise_model():
     #
     return 0
-
 
 # This section is used to build an array of the data, should be called very rarely, helpful for understanding what the user is looking at
 def get_solution(example):
@@ -65,11 +64,18 @@ def get_solutions():
 logic = lg.Logic_Machine()
 
 #Take a normalised return and judge the next logical move from it
-def interpret_normal_signal(config, signal):
-    logic.think(config, signal)
+def interpret_normal_signals(config, signal):
+    return logic.signalthink(config, signal)
+
+def logic_simulate():
+    return qe.dev_sim(logic_simulate(config,signal))
+
+#Full signal map and config list and produce a solution from it
+def build_solutions(signalmap, example):
+    return logic.solutionthink(signalmap)
 
 #take a target example and create a normalised map of the results
-
 def compare_solution():
+    qe.dev_score()
     return 0
 
