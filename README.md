@@ -1,4 +1,4 @@
-Version Number `0.2`
+Version Number `0.3`
 
 # Introduction 
 Welcome to the Quantum Next Generation 2022 Radar Challenge Beta Phase. I hope you are as excited to tinker with this as I was to build it.
@@ -8,6 +8,57 @@ We are all proficient and smart, so let's do our best to aid each other in this 
 This module is a wrapper for the standard Python `request` package, taking standard HTTPS requests like `POST` and `GET` and doing the legwork of making it as accessible as possible.
 
 This system of keeping the simulator online will allow us to have the core operations be hidden and ensure the fairness of this challenge.
+
+# QA and Security Testers [Section Removed From Production]
+Until the launch of the Challenge, the server will be running in several stages to isolate and develop the core components of the code.
+
+1. INFRASTRUCTURE - Azure Web Services, V.Net, MySQL Database, Backups and Scalablity
+2. DEVELOPMENT PHASE - HTTPS, Token Access, Simulator Load Testing, Record Keeping `<- WE ARE HERE`
+3. TEST PHASE - HTTPS, Token Access, Simulator Load Testing, Record Keeping, Scoring, Validation
+4. SITE-SIM CONNECTION - Site-Sim Account Sync, Leaderboard
+5. NICE TO HAVE - Past Activities via Site, See other Team score breakdowns
+
+Testers, Trialers and Security Assessors are encouraged to pursue and hammer, pull, overload, or pry at any of the components in the current and past stages. Progression should occur rather quickly along the stages, and this GitHub will remain updated with the latest released version and the ReadMe will be changed accordingly.
+
+Dummy token data will be listed at the bottom of this section.
+
+## Stage 1 - INFRASTRUCTURE
+
+The entire Challenge is hosted in Microsoft Azure Web App Services, with two containers for the WordPress site (https://qng22.azurewebsites.net) and the Simulator (https://qng22-sim.azurewebsites.net). A third instance is created to host the MySQL server that will be handling the content for WordPress. This is so accounts share a single source for both instances, and the data in the simulator can be read eventually by the website for features like the Leaderboard.
+
+## Stage 2 - DEVELOPMENT PHASE `<- WE ARE HERE`
+The site will be populated with dummy user and authentication data, and the only active connection points will be the development data set and the development simulator, this is to recreate the first half of the challenge, and to assess potential issues with load, record keeping, or the client side code.
+
+## Stage 3 - TESTING PHASE
+The connectors will be turned on for the Test side of the challenge, allowing the client code to access the Testing Simulator and use the scoring/validation functions. This will continue to use the dummy login data and tokens from Phase 2
+
+## Stage 4 - SITE-SIM CONNECTION
+This will replace the dummy access data that remains isolated to the simulator and instead use login data shared between the WordPress and Simulator. Users at this stage can create an account, generate a key, reset their password, and generate another key. This will ensure user privacy can be secured by the user. Additionally data that has been kept by the simulator can now be read by the site and will produce a live leaderboard based on the scores input into the Database.
+
+## Stage 5 - NICE TO HAVE
+These are various activities that will allow users and the site to read select data from the database to create a more dynamic experience, will be expounded upon later.
+
+
+## DUMMY AUTHENTICATION
+
+### Alpha
+Token: 
+
+### Bravo
+Token: 
+
+### Charlie
+Token: 
+
+### Delta
+Token: 
+
+### Echo
+Token: 
+
+### Foxtrot
+Token: 
+
 
 # Getting Started
 
