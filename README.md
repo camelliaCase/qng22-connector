@@ -27,6 +27,63 @@ python -m pip install requests
 ```
 
 # Documentation
+
+# Valid Data Structures
+
+## Radar Configurations (Pulse, Measurement, Example)
+#### Variables
+* Pulse | List
+    * Start | Integer: 0-500000 us (microseconds)
+    * End | Integer: 0-500000 us (microseconds)
+* Measurement | List
+    * Start | Integer: 0-500000 us (microseconds)
+    * End | Integer: 0-500000 us (microseconds)
+    * Phase | Float: radians
+* Example Target | Integer: 0-999
+```json
+data: {
+    "example": integer,
+    "pulses": {
+            "start": integer,
+            "end": integer
+    },
+    "measurements": {
+        "start": integer,
+        "end": integer,
+        "phase": float
+    }
+}
+```
+## Results (Configuration, Estimates)
+#### Variables
+* Configurations | List: 1000 size
+    * Pulses | List: >1 size
+        * Pulse | List: 2 size
+            * Start | Integer: 0-500000 us (microseconds)
+            * End | Integer: 0-500000 us (microseconds)
+    * Measurements | List: >1 size
+        * Measurement | List: 3 size
+            * Start | Integer: 0-500000 us (microseconds)
+            * End | Integer: 0-500000 us (microseconds)
+            * Phase | Float: radians
+    * Example Target | Integer: 0-999 
+```json
+data: {
+    [
+        "pulses": [
+            "start": integer,
+            "end": integer
+        ],
+        "measurements": [
+            "start": integer,
+            "end": integer,
+            "phase": float
+        ],
+        "example": integer
+    ]
+}
+```
+
 #### Development vs Testing
 In `qe_radar` there are two class objects that determine which simulator and dataset you will be targeting with any function - `DevSimulator` and `TestSimulator`
 In `DevSimulator`, the example targets are known to you, and can be gathered using the `.dataset( int )` function. This is to encourage building and refining accurate models.
