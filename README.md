@@ -1,28 +1,28 @@
 # Technical Manual 
-Version Number `0.5`
+Version Number `0.6`
 
 Welcome to the Quantum Next Generation 2022 Radar Challenge Beta Phase.
 
-The following document will contain key information that will ensure you have a thorough understanding about how to execute on the challenge through the use of this python package.
+The following document contains key information  to execute  the challenge through the use of this python package. 
 
-The technical requirement of the challenge requires the user to connect to the simulator online to analyse the dataset and perform activities. This is achieved using REST and HTTP requests.
+The technical requirement of The Challenge requires the user to connect to the simulator online to analyse the dataset and perform activities. This is achieved using REST and HTTP requests. 
 
-This file is a wrapper for the standard Python `request` package, taking standard HTTPS requests like `POST` and `GET` and doing the legwork of configuring it for the simulator as easily as possible.
+This file is a wrapper for the standard Python `requests` package, taking common HTTP requests like `POST` and `GET` and doing the groundwork to configure requests for the simulator.
 
 # Getting Started
 
 ## Installation Process
-This package can be imported into any python script using the standard `import` feature. Outlined in this document will be the functions you need to call to invoke behviours in the simulator, explanations about their parameters, their returns, and their place in the larger challenge.
+This package can be imported into any python script using the standard `import` feature. This document outlines the functions you need to call to invoke functions in the simulator, explanations about their parameters, their returns, and their place in the challenge. 
 
-To install and use this package simply place this file with your project and input into your solution:
+To install and use this package place the qe_radar.py file with your project and input into your solution: 
 ```python
 import qe_radar
 ```
 This will allow you to run the functions listed in `Documentation` that will help you engage with the server.
 
 ## Software Dependencies
-As mentioned, the `qe_radar.py` is a preconfigured wrapper for the `requests` module, which will need to be installed so you can engage with the simulator.
-You can install `requests` using pip or your choice of package manager.
+`qe_radar.py` is a preconfigured wrapper for the `requests` module, which will need to be installed so you can engage with the simulator.
+You can install `requests` using `pip` or your choice of package manager.
 ```
 python -m pip install requests
 ```
@@ -37,7 +37,7 @@ As outlined in the problem brief, the variables used will have certain restricti
 * Pulse | List: Length 2
     * Start | Integer: 0-500000 us (microseconds)
     * End | Integer: 0-500000 us (microseconds)
-* Measurement | List : Length 3
+* Measurement | List: Length 3
     * Start | Integer: 0-500000 us (microseconds)
     * End | Integer: 0-500000 us (microseconds)
     * Phase | Float: Radians
@@ -63,13 +63,14 @@ Configuration for a pulse that runs from `2 us` to `13 us`, with a measurement w
     * Example Target | Integer: 0-999 
 * Estimates | List: Length 1000
     * Estimate | List: Length 4
-        * Rabi |  Float: M/Rads
-        * Detuning | Float: M/Rads
-        * Time of Flight | Float: > 0 us (microseconds)
+        * Rabi |  Float: $1/10^5$ to $4$ Mrads
+        * Detuning | Float: -24 to 24 krads
+        * Time of Flight | Float: 6 to 670 us (microseconds)
         * Example Target | Integer: 0-999
 
-Example Results for development dataset, showing only a few items for Configurations and Estimates:
+
 #### **Example**:
+Results for development dataset, showing only a few items for configurations and estimates:
 ```python
 Configurations=[
     Example0=[
@@ -94,18 +95,18 @@ Estimates=[
 
 ## Development vs Testing
 In `qe_radar` there are two class objects that determine which simulator/dataset you will be targeting with any function - `DevSimulator` and `TestSimulator`
-In `DevSimulator`, the example targets are known to you, and can be gathered using the `.dataset( int )` function. This is to encourage building and refining accurate models.
-In `TestSimulator`, the example targets are unknown, this is because you will score on this dataset, and thus should only know how close you are on average to ensure it is your technique that is being measured, and not the replication of the data.
+In `DevSimulator`, the example targets are known to you, and can be gathered using the `.dataset( int )` function. This is to develop a technique that gets as close as possible to that target.
+In `TestSimulator`, the example targets are unknown,  and you will test your technique and solution to produce an estimate of the targets. Your estimates will be used to create your score and your configurations will be assessed for their validity. 
 
 ## Development Phase
 
-Before using any function in the Development Simulator class, you must first create an object of it and assign your authentication token, as this will be parsed by the server as proof of access and assign your results to the leaderboard. All simulator functions are then called from this created object. You can assign your authentication token during creation of the object by passing it as a parameter.
+Before using any function in the `DevSimulator` class, you must first initialise an object of it and assign your authentication token, as this will be parsed by the server as proof of access and used to assign your results to the leaderboard. All simulator functions are then called from this created object. You can assign your authentication token during creation of the object by passing it as a parameter.
 ```python
 simulator = qe_radar.DevSimulator("5128uhn15adwaf421")
 ```
 
 ### `authentication(token)`
-Run this function before any other calls with the token assigned to your team, this will permit use of the simulator and allow your efforts to be correctly assigned to you.
+Running this function updates the token to access the simulator and record your results.
 #### **Example**:
 ```python
 import qe_radar
@@ -135,7 +136,7 @@ print(radar.simulate(pulse, detect, 81))
 
 ### `dataset(example)`
 
-Get the Rabi, Detuning, and Time of Flight for the chosen example target.
+Get the Rabi (Mrads), Detuning (Mrads), and Time of Flight (us) for the chosen example target.
 
 #### **Example**:
 Finding the details of the development target `1`
@@ -177,13 +178,13 @@ else:
 
 ## Testing Phase
 
-Before using any function in the Test Simulator class, you must first create an object of it and assign your authentication token. All functions are then called from this created object. You can assign your authentication token during creation of the object by passing it as a parameter.
+Before using any function in the Test Simulator class, you must first initialise an object of it and assign your authentication token. All functions are then called from this created object. You can assign your authentication token during creation of the object by passing it as a parameter.
 ```python
 simulator = qe_radar.TestSimulator("5128uhn15adwaf421")
 ```
 
 ### `authentication(token)`
-Run this function before any other calls with the token assigned to your team, this will permit use of the simulator and allow your efforts to be correctly assigned to you.
+Running this function updates the token to access the simulator and record your results. 
 #### **Example**:
 ```python
 import qe_radar
@@ -213,7 +214,7 @@ print(radar.simulate(pulse, detect, 34))
 
 ### `score(config, estimates)`
 
-Submit results with the configurations used to produce the estimates and the estimates for all targets in the testing dataset with intention for them to be scored. Returned results will be the mean accuracy across all targets, along with the standard deviation for the three values.
+Submit results with the configurations used to produce the estimates and the estimates for all targets in the testing dataset with intention for them to be scored. The returned results will be the mean score across the three values, along with the standard deviation each of the three values.
 
 #### **Example**:
 ```python
