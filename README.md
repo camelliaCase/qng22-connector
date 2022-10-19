@@ -89,7 +89,7 @@ Configurations=[
         Measurements=[Start=Int, End=Int, Phase=Float],
         ExampleID=Int
     ],
-    #...Example 2 to Example 999
+    #...Configuration for Example 2 to Example 999
 ],
 Estimates=[
     Estimate0=[Rabi=Float, Detuning=Float, T_Flight=Float, ExampleID=Int],
@@ -110,7 +110,7 @@ Estimates=[
         [[10, 36],[45, 99],[100, 300],[400, 800],[5000, 25000]...],
         1
     ],
-    #...Example 2 to Example 999
+    #...Configuration for Example 2 to Example 999
 ],
 [
     [0.00453748376016974, -0.02249823109292496, 153.73902434863788, 0],
@@ -131,9 +131,6 @@ Before using any function in the `DevSimulator` class, you must first initialise
 ```python
 simulator = qe_radar.DevSimulator("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 ```
-
-500 000
-
 
 ### `authentication(token)`
 Running this function updates the token to access the simulator and record your results.
@@ -182,7 +179,7 @@ print(radar.dataset(1))
 
 ### `validate_config(configuration)`
 
-To provide Team's guidance on how they need to format their submission and if it their method produces a valid configuration list structure before submitting in the Testing stage.
+To provide Team's guidance on how they need to format their submission and if their method produces a valid configuration list structure before submission in the Testing stage.
 
 It does not confirm if the configuration list has all thousand (needed) entries or if estimates are formatted correctly.
 
@@ -203,7 +200,7 @@ print(radar.validate_config(configs))
 
 ### `validate_estimate(estimates)`
 
-To provide Team's guidance on how they need to format their submission and if it their method produces a valid estimate list structure before submitting in the Testing stage.
+To provide Team's guidance on how they need to format their submission and if their method produces a valid estimate list structure before submission in the Testing stage.
 
 It does not confirm if the estimate list has all thousand (needed) entries or if configurations are formatted correctly.
 
@@ -261,7 +258,7 @@ print(radar.simulate(pulse, detect, 34))
 
 ### `score(configurations, estimates)`
 
-Submit results with the configurations used to produce the estimates and the estimates for all targets in the testing dataset with intention for them to be scored. The returned results will be the mean score across the three values, along with the standard deviation each of the three values.
+Submit results with estimates for all targets in the testing dataset and the configurations used to produce the estimates; with intention for them to be scored. The returned results will be the mean score across the three values (Rabi, Detuning and Time of Flight), along with their standard deviation.
 
 #### **Example**:
 ```python
