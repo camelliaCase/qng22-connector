@@ -12,17 +12,23 @@ This file is a wrapper for the standard Python `requests` package, taking common
 # Getting Started
 
 ## Installation Process
-This package can be imported into any python script using the standard `import` feature. This document outlines the functions you need to call to invoke functions in the simulator, explanations about their parameters, their returns, and their place in the challenge. 
+This package can be imported into custom python script using the standard `import` feature. The documentation will outline the functions you need to call to invoke functions in the simulator, as well as providing explanations about their parameters, their returns, and their role in the challenge. 
 
-To install and use this package place the qe_radar.py file with your project and input into your solution: 
+To install and use this package, download/clone and place the qe_radar.py file within your project folder:
+```bash
+example-qng22-team-solution-folder
+|   qng22-solution.py
+|   qe_radar.py
+```
+ and input into your custom python script:
 ```python
 import qe_radar
 ```
-This will allow you to run the functions listed in `Documentation` that will help you engage with the server.
+This will allow you to run the functions listed in `Documentation` that will help you engage with the simulation server.
 
 ## Software Dependencies
 `qe_radar.py` is a preconfigured wrapper for the `requests` module, which will need to be installed so you can engage with the simulator.
-You can install `requests` using `pip` or your choice of package manager.
+You can install `requests` *(if you do not already have it)* using `pip` or your choice of package manager.
 ```
 python -m pip install requests
 ```
@@ -74,22 +80,43 @@ Results for development dataset, showing only a few items for configurations and
 ```python
 Configurations=[
     Example0=[
-        Pulses=[[1, 20],[21, 100],[140, 500],[1000, 2000],[2000, 10000]...],
-        Measurements=[[10, 36],[45, 99],[100, 300],[400, 800],[5000, 25000]...],
-        Example=0
+        Pulses=[Start=Int, End=Int],
+        Measurements=[Start=Int, End=Int, Phase=Float],
+        ExampleID=Int
     ],
     Example1=[
-        Pulses=[[1, 20],[21, 100],[140, 500],[1000, 2000],[2000, 10000]...],
-        Measurements=[[10, 36],[45, 99],[100, 300],[400, 800],[5000, 25000]...],
-        Example=1
+        Pulses=[Start=Int, End=Int],
+        Measurements=[Start=Int, End=Int, Phase=Float],
+        ExampleID=Int
     ],
     #...Example 2 to Example 999
 ],
 Estimates=[
-    Example0=[0.00453748376016974, -0.02249823109292496, 153.73902434863788, 0],
-    Example1=[0.0002964523714059984, -0.015549490574576096, 643.6452780943542, 1],
-    Example2=[0.000541916391029567, -0.017939610742308935, 549.3026779212704, 2],
-    #...Example 3 to Example 999
+    Estimate0=[Rabi=Float, Detuning=Float, T_Flight=Float, ExampleID=Int],
+    Estimate1=[Rabi=Float, Detuning=Float, T_Flight=Float, ExampleID=Int],
+    Estimate2=[Rabi=Float, Detuning=Float, T_Flight=Float, ExampleID=Int],
+    #...Estimate for Examples 3 to 999
+]
+```
+```python
+[
+    [
+        [[1, 20],[21, 100],[140, 500],[1000, 2000],[2000, 10000]...],
+        [[10, 36],[45, 99],[100, 300],[400, 800],[5000, 25000]...],
+        0
+    ],
+    [
+        [[1, 20],[21, 100],[140, 500],[1000, 2000],[2000, 10000]...],
+        [[10, 36],[45, 99],[100, 300],[400, 800],[5000, 25000]...],
+        1
+    ],
+    #...Example 2 to Example 999
+],
+[
+    [0.00453748376016974, -0.02249823109292496, 153.73902434863788, 0],
+    [0.0002964523714059984, -0.015549490574576096, 643.6452780943542, 1],
+    [0.000541916391029567, -0.017939610742308935, 549.3026779212704, 2],
+    #...Estimate for Examples 3 to 999
 ]
 ```
 
@@ -102,8 +129,11 @@ In `TestSimulator`, the example targets are unknown,  and you will test your tec
 
 Before using any function in the `DevSimulator` class, you must first initialise an object of it and assign your authentication token, as this will be parsed by the server as proof of access and used to assign your results to the leaderboard. All simulator functions are then called from this created object. You can assign your authentication token during creation of the object by passing it as a parameter.
 ```python
-simulator = qe_radar.DevSimulator("5128uhn15adwaf421")
+simulator = qe_radar.DevSimulator("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 ```
+
+500 000
+
 
 ### `authentication(token)`
 Running this function updates the token to access the simulator and record your results.
@@ -112,7 +142,7 @@ Running this function updates the token to access the simulator and record your 
 import qe_radar
 
 sim = qe_radar.DevSimulator()
-sim.authentication("5128uhn15adwaf421")
+sim.authentication("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 ```
 
 ### `simulate(pulse, detect, example)`
@@ -124,7 +154,7 @@ Running the development simulator against target `81` with a pulse that runs fro
 ```python
 import qe_radar
 
-radar = qe_radar.DevSimulator("5128uhn15adwaf421")
+radar = qe_radar.DevSimulator("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 
 pulse = [0,10]
 detect = [3,7]
@@ -143,44 +173,61 @@ Finding the details of the development target `1`
 ```python
 import qe_radar
 
-radar = qe_radar.DevSimulator("5128uhn15adwaf421")
+radar = qe_radar.DevSimulator("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 
 print(radar.dataset(1))
 
 >>> [0.0002964523714059984, -0.015549490574576096, 643.6452780943542]
 ```
 
-### `validate(config, score)`
+### `validate_config(configuration)`
 
-To provide Team's guidance on how they need to format their submission and if it their method produces a valid submission before the Testing stage.
+To provide Team's guidance on how they need to format their submission and if it their method produces a valid configuration list structure before submitting in the Testing stage.
+
+It does not confirm if the configuration list has all thousand (needed) entries or if estimates are formatted correctly.
+
 #### **Example**:
 ```python
 import qe_radar
 
-radar = qe_radar.DevSimulator("5128uhn15adwaf421")
+radar = qe_radar.DevSimulator("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 
 configs = [[[[0,10],[10,15],[18,45]...], [[2,8,1.1],[14,15,0.32],[30,40,0.82]...], 0],
             [[[0,10],[10,15],[18,45]...], [[2,8,1.1],[14,15,0.32],[30,40,0.82]...], 1],
             [[[0,10],[10,15],[18,45]...], [[2,8,1.1],[14,15,0.32],[30,40,0.82]...], 2]...]
 
-score = [[0.00453748376016974, -0.02249823109292496, 153.73902434863788, 0],
+print(radar.validate_config(configs))
+
+>>> 'Configuration invalid, submitted configurations are unordered'
+```
+
+### `validate_estimate(estimates)`
+
+To provide Team's guidance on how they need to format their submission and if it their method produces a valid estimate list structure before submitting in the Testing stage.
+
+It does not confirm if the estimate list has all thousand (needed) entries or if configurations are formatted correctly.
+
+#### **Example**:
+```python
+import qe_radar
+
+radar = qe_radar.DevSimulator("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
+
+estimates = [[0.00453748376016974, -0.02249823109292496, 153.73902434863788, 0],
         [0.0002964523714059984, -0.015549490574576096, 643.6452780943542, 1],
         [0.000541916391029567, -0.017939610742308935, 549.3026779212704, 2]...]
 
-valid = radar.validate(configs, scores)
-if valid == 'valid':
-    print("Configuration and Scores are valid")
-else:
-    print(valid)
 
->>> 'Configuration Invalid, incorrect number of configs and scores.'
+print(radar.validate_estimate(estimates))
+
+>>> 'Configuration invalid, submitted estimates are unordered'
 ```
 
 ## Testing Phase
 
 Before using any function in the Test Simulator class, you must first initialise an object of it and assign your authentication token. All functions are then called from this created object. You can assign your authentication token during creation of the object by passing it as a parameter.
 ```python
-simulator = qe_radar.TestSimulator("5128uhn15adwaf421")
+simulator = qe_radar.TestSimulator("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 ```
 
 ### `authentication(token)`
@@ -190,7 +237,7 @@ Running this function updates the token to access the simulator and record your 
 import qe_radar
 
 sim = qe_radar.TestSimulator()
-sim.authentication("5128uhn15adwaf421")
+sim.authentication("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 ```
 
 ### `simulate(pulse, detect, example)`
@@ -202,7 +249,7 @@ Running the test simulator against target `34` with a pulse that runs from `12 u
 ```python
 import qe_radar
 
-radar = qe_radar.TestSimulator("5128uhn15adwaf421")
+radar = qe_radar.TestSimulator("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 
 pulse = [12,18]
 detect = [13,19]
@@ -212,7 +259,7 @@ print(radar.simulate(pulse, detect, 34))
 >>> 0.455132
 ```
 
-### `score(config, estimates)`
+### `score(configurations, estimates)`
 
 Submit results with the configurations used to produce the estimates and the estimates for all targets in the testing dataset with intention for them to be scored. The returned results will be the mean score across the three values, along with the standard deviation each of the three values.
 
@@ -224,13 +271,13 @@ configs = [[[[0,10],[10,15],[18,45]...], [[2,8,1.1],[14,15,0.32],[30,40,0.82]...
             [[[0,10],[10,15],[18,45]...], [[2,8,1.1],[14,15,0.32],[30,40,0.82]...], 1],
             [[[0,10],[10,15],[18,45]...], [[2,8,1.1],[14,15,0.32],[30,40,0.82]...], 2]...]
 
-score = [[0.00453748376016974, -0.02249823109292496, 153.73902434863788, 0],
+estimates = [[0.00453748376016974, -0.02249823109292496, 153.73902434863788, 0],
         [0.0002964523714059984, -0.015549490574576096, 643.6452780943542, 1],
         [0.000541916391029567, -0.017939610742308935, 549.3026779212704, 2]...]
 
-radar = qe_radar.TestSimulator("5128uhn15adwaf421")
+radar = qe_radar.TestSimulator("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 
-print(radar.score(configs, scores))
+print(radar.score(configs, estimates))
 
 >>> [45, 1.2, 4.2, 0.2]
 ```

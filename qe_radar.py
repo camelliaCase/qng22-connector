@@ -24,7 +24,7 @@ class DevSimulator (object):
         payload = {"pulse":[pulse[0],pulse[1]], "measurement":[measure[0], measure[1], measure[2]]}
         
         #sends data to site, stores in variable r
-        r = self.post(str(example), payload)
+        r = self.post(payload, str(example))
 
         #return to user the actual value of the request, removing header and online data that is unneeded
         return r.text
@@ -38,11 +38,18 @@ class DevSimulator (object):
         #return to user the actual value of the request, removing header and online data that is unneeded
         return r.text
 
-    def validate(self, configs: list, estimates: list) -> str:
+    def validate_config(self, configs: list) -> str:
         
-        payload = {"configuration":configs, "estimates":estimates}
+        payload = {"configuration":configs}
 
-        r = self.post(payload, "/validate")
+        r = self.post(payload, "/config")
+        return r.text
+
+    def validate_estimate(self, estimates: list) -> str:
+        
+        payload = {"estimates":estimates}
+
+        r = self.post(payload, "/estimate")
         return r.text
 
     def post(self, payload, ref=""):
