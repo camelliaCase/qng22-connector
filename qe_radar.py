@@ -5,7 +5,7 @@ class DevSimulator (object):
 
     def __init__(self, token: str = ""):
         self.token = token
-        self.URL = "https://qng22-sim.azurewebsites.net/dev"
+        self.URL = "https://qng22-sim.azurewebsites.net/dev/"
 
     def authentication(self, token: str):
         """Updates the access token used by the simulator connector"""
@@ -42,14 +42,14 @@ class DevSimulator (object):
         
         payload = {"configuration":configs}
 
-        r = self.post(payload, "/config")
+        r = self.post(payload, "config")
         return r.text
 
     def validate_estimate(self, estimates: list) -> str:
         
         payload = {"estimates":estimates}
 
-        r = self.post(payload, "/estimate")
+        r = self.post(payload, "estimate")
         return r.text
 
     def post(self, payload, ref=""):
@@ -61,7 +61,7 @@ class DevSimulator (object):
 class TestSimulator(object):
     def __init__(self, token: str = "") -> None:
         self.token = token
-        self.URL = "https://qng22-sim.azurewebsites.net/test"
+        self.URL = "https://qng22-sim.azurewebsites.net/test/"
 
     def authentication(self, token: str):
         self.token = token
@@ -78,7 +78,7 @@ class TestSimulator(object):
 
     def score(self, configs:list, estimates:int):
         payload = {"configuration":configs, "estimates":estimates}
-        r = self.post(payload, "/score")
+        r = self.post(payload, "score")
 
     def post(self, payload, ref=""):
         return requests.post(self.URL+ref, data=payload, headers={'Authorization': self.token})
