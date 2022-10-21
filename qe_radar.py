@@ -3,8 +3,8 @@ import requests
 
 class DevSimulator (object):
 
-    def __init__(self):
-        self.token = ""
+    def __init__(self, token: str = ""):
+        self.token = token
         self.URL = "https://qng22-sim.azurewebsites.net/dev/"
 
     def authentication(self, token: str):
@@ -59,8 +59,8 @@ class DevSimulator (object):
         return requests.get(self.URL+ref, headers={'Authorization': self.token})
 
 class TestSimulator(object):
-    def __init__(self) -> None:
-        self.token = ""
+    def __init__(self, token: str = "") -> None:
+        self.token = token
         self.URL = "https://qng22-sim.azurewebsites.net/test/"
 
     def authentication(self, token: str):
