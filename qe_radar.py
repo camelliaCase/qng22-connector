@@ -1,7 +1,8 @@
-from xmlrpc.client import Boolean
 import requests
 
 class DevSimulator (object):
+
+    token = ""
 
     def __init__(self, token: str = ""):
         self.token = token
@@ -21,7 +22,7 @@ class DevSimulator (object):
         example -- id of example chosen for the simulation (0-999)
         """
         #creates JSON form data for HTTP request
-        payload = {"pulse":[pulse[0],pulse[1]], "measurement":[measure[0], measure[1], measure[2]]}
+        payload = {"pulsestart":pulse[0], "pulseend":pulse[1], "measurestart":measure[0], "measureend":measure[1], "phase":measure[2]}
         
         #sends data to site, stores in variable r
         r = self.post(payload, str(example))
@@ -53,10 +54,11 @@ class DevSimulator (object):
         return r.text
 
     def post(self, payload, ref=""):
-        return requests.post(self.URL+ref, data=payload, headers={'Authorization': self.token})
+        print (self.token)
+        return requests.post(self.URL+ref, data=payload, headers={'Authentication': self.token})
 
     def get(self, ref=""):
-        return requests.get(self.URL+ref, headers={'Authorization': self.token})
+        return requests.get(self.URL+ref, headers={'Authentication': self.token})
 
 class TestSimulator(object):
     def __init__(self, token: str = "") -> None:
@@ -68,7 +70,7 @@ class TestSimulator(object):
 
     def simulate(self, pulse: list[int], measure:list, example:int):
         #creates JSON form data for HTTP request
-        payload = {"pulsestart":pulse[0], "pulseend":pulse[1], "measurestart":measure[0], "measureend":measure[1], "phase":measure[2], "example":example}
+        payload = {"pulsestart":pulse[0], "pulseend":pulse[1], "measurestart":measure[0], "measureend":measure[1], "phase":measure[2]}
         
         #sends data to site, stores in variable r
         r = self.post(payload)
@@ -81,7 +83,7 @@ class TestSimulator(object):
         r = self.post(payload, "score")
 
     def post(self, payload, ref=""):
-        return requests.post(self.URL+ref, data=payload, headers={'Authorization': self.token})
+        return requests.post(self.URL+ref, data=payload, headers={'Authentication': self.token})
 
     def get(self, ref=""):
-        return requests.get(self.URL+ref, headers={'Authorization': self.token})
+        return requests.get(self.URL+ref, headers={'Authentication': self.token})
