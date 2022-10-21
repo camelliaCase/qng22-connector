@@ -28,7 +28,7 @@ class DevSimulator (object):
         r = self.post(payload, str(example))
 
         #return to user the actual value of the request, removing header and online data that is unneeded
-        return r.text
+        return r.json()['signal']
 
     #Directly calls dev_data() in qe_radar
     def dataset(self, example) -> list:
@@ -36,8 +36,10 @@ class DevSimulator (object):
         #sends data to site, stores in variable r
         r = self.get(str(example))
 
+        data = r.json()
+    
         #return to user the actual value of the request, removing header and online data that is unneeded
-        return r.text
+        return [data['Rabi'], data['Detuning'], data['T_Flight']]
 
     def validate_config(self, configs: list) -> str:
         
@@ -75,7 +77,7 @@ class TestSimulator(object):
         r = self.post(payload)
 
         #return to user the actual value of the request, removing header and online data that is unneeded
-        return r.text
+        return r.json()['signal']
 
     def score(self, configs:list, estimates:int):
         payload = {"configuration":configs, "estimates":estimates}
