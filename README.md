@@ -154,9 +154,9 @@ import qe_radar
 radar = qe_radar.DevSimulator("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 
 pulse = [0,10]
-detect = [3,7]
+measure = [3,7,1.0]
 
-print(radar.simulate(pulse, detect, 81))
+print(radar.simulate(pulse, measure, 81))
 
 >>> 0.455132
 ```
@@ -249,9 +249,9 @@ import qe_radar
 radar = qe_radar.TestSimulator("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 
 pulse = [12,18]
-detect = [13,19]
+measure = [13,19,1.0]
 
-print(radar.simulate(pulse, detect, 34))
+print(radar.simulate(pulse, measure, 34))
 
 >>> 0.455132
 ```
