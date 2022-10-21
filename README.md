@@ -142,7 +142,7 @@ sim = qe_radar.DevSimulator()
 sim.authentication("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 ```
 
-### `simulate(pulse, detect, example)`
+### `simulate(pulse, measure, example)`
 
 Send a radar configuration of pulse and measurement to the simulator and receive a normalised signal.
 
@@ -237,7 +237,7 @@ sim = qe_radar.TestSimulator()
 sim.authentication("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 ```
 
-### `simulate(pulse, detect, example)`
+### `simulate(pulse, measure, example)`
 
 Send a radar configuration of pulse and measurement to the simulator and receive a normalised signal.
 
