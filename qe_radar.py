@@ -54,7 +54,6 @@ class DevSimulator (object):
         return r.text
 
     def post(self, payload, ref=""):
-        print (self.token)
         return requests.post(self.URL+ref, data=payload, headers={'Authentication': self.token})
 
     def get(self, ref=""):
