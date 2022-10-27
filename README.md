@@ -52,7 +52,7 @@ As outlined in the problem brief, the variables used will have certain restricti
 #### **Example**: 
 Configuration for a pulse that runs from `2 us` to `13 us`, with a measurement window from `5 us` to `6 us`, adjusted by `2.1 radians` against target `1`:
 
-    ([2, 13], [5, 6, 2.1], 1)
+    [2, 13], [5, 6, 2.1], 1
 
 
 ### Results (Configuration, Estimates)
