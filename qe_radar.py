@@ -1,12 +1,14 @@
 import requests
 
+QEC = "0.6" #Version number for Beta testing, can check with site for compatability, will provide appropriate error message when different
+
 class DevSimulator (object):
 
     token = ""
 
     def __init__(self, token: str = ""):
         self.token = token
-        self.URL = "https://quantumnextgen.com.au/dev/"
+        self.URL = "https://sim.quantumnextgen.com.au/dev/"
 
     def authentication(self, token: str):
         """Updates the access token used by the simulator connector"""
@@ -22,13 +24,13 @@ class DevSimulator (object):
         example -- id of example chosen for the simulation (0-999)
         """
         #creates JSON form data for HTTP request
-        payload = {"pulsestart":pulse[0], "pulseend":pulse[1], "measurestart":measure[0], "measureend":measure[1], "phase":measure[2]}
+        payload = {"pulse":pulse, "measurement":measure}
         
         #sends data to site, stores in variable r
         r = self.post(payload, str(example))
 
         #return to user the actual value of the request, removing header and online data that is unneeded
-        return r.json()['signal']
+        return float(r.text)
 
     #Directly calls dev_data() in qe_radar
     def dataset(self, example) -> list:
@@ -52,35 +54,35 @@ class DevSimulator (object):
         
         payload = {"estimates":estimates}
 
-        r = self.post(payload, "estimate")
+        r = self.post(payload, "estimates")
         return r.text
 
     def post(self, payload, ref=""):
-        return requests.post(self.URL+ref, data=payload, headers={'Authentication': self.token})
+        return requests.post(self.URL+ref, json=payload, headers={'Authentication': self.token, 'QeC':QEC})
 
     def get(self, ref=""):
-        return requests.get(self.URL+ref, headers={'Authentication': self.token})
+        return requests.get(self.URL+ref, headers={'Authentication': self.token, 'QeC':QEC})
 
 class TestSimulator(object):
     def __init__(self, token: str = "") -> None:
         self.token = token
-        self.URL = "https://quantumnextgen.com.au/test/"
+        self.URL = "https://sim.quantumnextgen.com.au/test/"
 
     def authentication(self, token: str):
         self.token = token
 
     def simulate(self, pulse: list[int], measure:list, example:int):
         #creates JSON form data for HTTP request
-        payload = {"pulsestart":pulse[0], "pulseend":pulse[1], "measurestart":measure[0], "measureend":measure[1], "phase":measure[2]}
-        
+        payload = {"pulse":pulse, "measurement":measure}
+
         #sends data to site, stores in variable r
         r = self.post(payload)
 
         #return to user the actual value of the request, removing header and online data that is unneeded
-        return r.json()['signal']
+        return float(r.text)
 
     def score(self, configs:list, estimates:int):
-        payload = {"configuration":configs, "estimates":estimates}
+        payload = {"configurations":configs, "estimates":estimates}
         r = self.post(payload, "score")
         if r.status_code != 200:
             print(r.text)
@@ -90,7 +92,7 @@ class TestSimulator(object):
             return [data['Score'],data['Rabi_Std'],data['Detuning_Std'],data['T_Flight_Std']]
 
     def post(self, payload, ref=""):
-        return requests.post(self.URL+ref, data=payload, headers={'Authentication': self.token})
+        return requests.post(self.URL+ref, json=payload, headers={'Authentication': self.token, 'QeC':QEC})
 
     def get(self, ref=""):
-        return requests.get(self.URL+ref, headers={'Authentication': self.token})
+        return requests.get(self.URL+ref, headers={'Authentication': self.token, 'QeC':QEC})
