@@ -6,7 +6,7 @@ class DevSimulator (object):
 
     def __init__(self, token: str = ""):
         self.token = token
-        self.URL = "https://qng22-sim.azurewebsites.net/dev/"
+        self.URL = "https://quantumnextgen.com.au/dev/"
 
     def authentication(self, token: str):
         """Updates the access token used by the simulator connector"""
@@ -64,7 +64,7 @@ class DevSimulator (object):
 class TestSimulator(object):
     def __init__(self, token: str = "") -> None:
         self.token = token
-        self.URL = "https://qng22-sim.azurewebsites.net/test/"
+        self.URL = "https://quantumnextgen.com.au/test/"
 
     def authentication(self, token: str):
         self.token = token
@@ -82,6 +82,12 @@ class TestSimulator(object):
     def score(self, configs:list, estimates:int):
         payload = {"configuration":configs, "estimates":estimates}
         r = self.post(payload, "score")
+        if r.status_code != 200:
+            print(r.text)
+            return r.text
+        else:
+            data = r.json
+            return [data['Score'],data['Rabi_Std'],data['Detuning_Std'],data['T_Flight_Std']]
 
     def post(self, payload, ref=""):
         return requests.post(self.URL+ref, data=payload, headers={'Authentication': self.token})
