@@ -1,6 +1,7 @@
 import requests
 
-QEC = "0.6" #Version number for Beta testing, can check with site for compatability, will provide appropriate error message when different
+QEC = "1.0" #Version number for challenge, can check with site for compatability,
+# will provide appropriate error message when different to server to help communicate with teams that urgent updates are needed
 
 class DevSimulator (object):
 
@@ -28,34 +29,62 @@ class DevSimulator (object):
         
         #sends data to site, stores in variable r
         r = self.post(payload, str(example))
-
-        #return to user the actual value of the request, removing header and online data that is unneeded
-        return float(r.text)
+        data = r.json
+        if r.status_code != 200:
+            raise Exception(r.text)
+        else:
+            #return to user the actual value of the request, removing header and online data that is unneeded
+            return float(r.text)
 
     #Directly calls dev_data() in qe_radar
     def dataset(self, example) -> list:
         """Requests the Rabi, Detuning, and Time of Flight for the chosen example target."""
+
         #sends data to site, stores in variable r
         r = self.get(str(example))
-
         data = r.json()
-    
-        #return to user the actual value of the request, removing header and online data that is unneeded
-        return [data['Rabi'], data['Detuning'], data['T_Flight']]
 
-    def validate_config(self, configs: list) -> str:
+        if r.status_code != 200:
+            raise Exception(r.text)
+        else:
+            #return to user the actual value of the request, removing header and online data that is unneeded
+            return [data['Rabi'], data['Detuning'], data['T_Flight']]
+
+    def validate_config(self, configs: list) -> bool:
         
         payload = {"configuration":configs}
 
         r = self.post(payload, "config")
-        return r.text
+        data = r.json()
 
-    def validate_estimate(self, estimates: list) -> str:
+        if r.status_code != 200:
+            raise Exception(r.text)
+        else:
+            if data['Valid'] == True:
+                print('Configurations are Valid')
+                return True
+            else:
+                for i in data['Error']:
+                    print(i)
+                return False
+
+    def validate_estimate(self, estimates: list) -> bool:
         
         payload = {"estimates":estimates}
 
         r = self.post(payload, "estimates")
-        return r.text
+        data = r.json()
+
+        if r.status_code != 200:
+            raise Exception(r.text)
+        else:
+            if data['Valid'] == True:
+                print('Estimates are Valid')
+                return True
+            else:
+                for i in data['Error']:
+                    print(i)
+                return False
 
     def post(self, payload, ref=""):
         return requests.post(self.URL+ref, json=payload, headers={'Authentication': self.token, 'QeC':QEC})
@@ -77,19 +106,27 @@ class TestSimulator(object):
 
         #sends data to site, stores in variable r
         r = self.post(payload)
+        data = r.json
 
+        if r.status_code != 200:
+            raise Exception(r.text)
         #return to user the actual value of the request, removing header and online data that is unneeded
-        return float(r.text)
+        else:
+            return float(r.text)
 
     def score(self, configs:list, estimates:int):
         payload = {"configurations":configs, "estimates":estimates}
         r = self.post(payload, "score")
+        data = r.json
         if r.status_code != 200:
-            print(r.text)
-            return r.text
+            raise Exception(r.text)
         else:
-            data = r.json
-            return [data['Score'],data['Rabi_Std'],data['Detuning_Std'],data['T_Flight_Std']]
+            if data['Valid'] == True:
+                return [data['Score'], [data['Rabi_Std'],data['Detuning_Std'],data['T_Flight_Std']],[data['Rabi_Mean'],data['Detuning_Mean'],data['T_Flight_Mean']]]
+            else:
+                for i in data['Error']:
+                    print(i)
+                return None
 
     def post(self, payload, ref=""):
         return requests.post(self.URL+ref, json=payload, headers={'Authentication': self.token, 'QeC':QEC})

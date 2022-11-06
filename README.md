@@ -1,5 +1,5 @@
 # Technical Manual 
-Version Number `0.6`
+Version Number `1.0`
 
 Welcome to the Quantum Next Generation 2022 Radar Challenge Beta Phase.
 
@@ -10,6 +10,8 @@ The technical requirement of The Challenge requires the user to connect to the s
 This file is a wrapper for the standard Python `requests` package, taking common HTTP requests like `POST` and `GET` and doing the groundwork to configure requests for the simulator.
 
 # Getting Started
+
+Python Version Required: `3.9+`, in order to update your Python 
 
 ## Installation Process
 This package can be imported into custom python script using the standard `import` feature. The documentation will outline the functions you need to call to invoke functions in the simulator, as well as providing explanations about their parameters, their returns, and their role in the challenge. 
@@ -69,9 +71,9 @@ Configuration for a pulse that runs from `2 us` to `13 us`, with a measurement w
     * Example Target | Integer: 0-999 
 * Estimates | List: Length 1000
     * Estimate | List: Length 4
-        * Rabi |  Float: $1/10^5$ to $4$ Mrads
-        * Detuning | Float: -24 to 24 krads
-        * Time of Flight | Float: 6 to 670 us (microseconds)
+        * Rabi |  Float: $1/10^4$ to $13$ Mrads
+        * Detuning | Float: $-24$ to $24$ krads
+        * Time of Flight | Float: $6$ to $335$ us (microseconds)
         * Example Target | Integer: 0-999
 
 
@@ -124,6 +126,10 @@ Estimates=[
 In `qe_radar` there are two class objects that determine which simulator/dataset you will be targeting with any function - `DevSimulator` and `TestSimulator`
 In `DevSimulator`, the example targets are known to you, and can be gathered using the `.dataset( int )` function. This is to develop a technique that gets as close as possible to that target.
 In `TestSimulator`, the example targets are unknown,  and you will test your technique and solution to produce an estimate of the targets. Your estimates will be used to create your score and your configurations will be assessed for their validity. 
+
+## Error Handling
+In the event of fault, there should be an Exception raised from the code that if not accounted for, will break any recursive functions. This may not be the fault of the your own code, and clarity on what caused the issue will be noted in the text of the Exception. 
+Speaking broadly for the underlying HTTP infrastructure being used, if it is a 4XX error code, then usually it is a failure of connection or compatability between the user and simulator. If it is a 500 error code, then it is a failure on the server end and an alert will be sent to the team to immediately rectify the fault.
 
 ## Development Phase
 
@@ -190,12 +196,13 @@ import qe_radar
 radar = qe_radar.DevSimulator("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 
 configs = [[[[0,10],[10,15],[18,45]...], [[2,8,1.1],[14,15,0.32],[30,40,0.82]...], 0],
-            [[[0,10],[10,15],[18,45]...], [[2,8,1.1],[14,15,0.32],[30,40,0.82]...], 1],
-            [[[0,10],[10,15],[18,45]...], [[2,8,1.1],[14,15,0.32],[30,40,0.82]...], 2]...]
+            [[[0,10],[10,15],[18,45]...], [[2,8,1.1],[14,15,0.32],[30,40,0.82]...], 2],
+            [[[0,10],[10,15],[18,45]...], [[2,8,1.1],[14,15,0.32],[30,40,0.82]...], 1]...]
 
 print(radar.validate_config(configs))
 
->>> 'Configuration invalid, submitted configurations are unordered'
+>>> 'Submitted configurations are unordered'
+>>> False
 ```
 
 ### `validate_estimate(estimates)`
@@ -211,13 +218,14 @@ import qe_radar
 radar = qe_radar.DevSimulator("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 
 estimates = [[0.00453748376016974, -0.02249823109292496, 153.73902434863788, 0],
-        [0.0002964523714059984, -0.015549490574576096, 643.6452780943542, 1],
-        [0.000541916391029567, -0.017939610742308935, 549.3026779212704, 2]...]
+        [0.0002964523714059984, -0.015549490574576096, 643.6452780943542, 2],
+        [0.000541916391029567, -0.017939610742308935, 549.3026779212704, 1]...]
 
 
 print(radar.validate_estimate(estimates))
 
->>> 'Configuration invalid, submitted estimates are unordered'
+>>> 'Submitted estimates are unordered'
+>>> False
 ```
 
 ## Testing Phase
@@ -258,7 +266,7 @@ print(radar.simulate(pulse, measure, 34))
 
 ### `score(configurations, estimates)`
 
-Submit results with estimates for all targets in the testing dataset and the configurations used to produce the estimates; with intention for them to be scored. The returned results will be the mean score across the three values (Rabi, Detuning and Time of Flight), along with their standard deviation.
+Submit results with estimates for all targets in the testing dataset and the configurations used to produce the estimates; with intention for them to be scored. The returned results will be Score (mean squared score with the success approaching 0), precision (standard deviations for Rabi, Detuning and Time of Flight) and accuracy (means for Rabi, Detuning and Time of Flight). If the submission is misconfigured the issues will be printed and score() will return None.
 
 #### **Example**:
 ```python
@@ -276,5 +284,5 @@ radar = qe_radar.TestSimulator("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 
 print(radar.score(configs, estimates))
 
->>> [45, 1.2, 4.2, 0.2]
+>>> [45, [1.2, 4.2, 0.2], [0.5, 2.1, 1.1]] # [ Score, [Precision (STD)], [Accuracy (Mean)] ]
 ```
