@@ -67,7 +67,7 @@ Configuration for a pulse that runs from `2 us` to `13 us`, with a measurement w
         * Measurement | List: Length 3
             * Measure Start | Integer: 0-500000 us (microseconds)
             * Measure End | Integer: 0-500000 us (microseconds)
-            * Phase | Float: radians
+            * Phase | Float: 0 or Pi/2 radians
     * Example Target | Integer: 0-999 
 * Estimates | List: Length 1000
     * Estimate | List: Length 4
@@ -82,13 +82,13 @@ Results for development dataset, showing only a few items for configurations and
 ```python
 Configurations=[
     Example0=[
-        Pulses=[Start=Int, End=Int],
-        Measurements=[Start=Int, End=Int, Phase=Float],
+        Pulses=[[Start=Int, End=Int]],
+        Measurements=[[Start=Int, End=Int, Phase=Float]],
         ExampleID=Int
     ],
     Example1=[
-        Pulses=[Start=Int, End=Int],
-        Measurements=[Start=Int, End=Int, Phase=Float],
+        Pulses=[[Start=Int, End=Int]],
+        Measurements=[[Start=Int, End=Int, Phase=Float]],
         ExampleID=Int
     ],
     #...Configuration for Example 2 to Example 999
@@ -104,12 +104,12 @@ Estimates=[
 [
     [
         [[1, 20],[21, 100],[140, 500],[1000, 2000],[2000, 10000]...],
-        [[10, 36],[45, 99],[100, 300],[400, 800],[5000, 25000]...],
+        [[10, 36, 0],[45, 99, 0],[100, 300, 0],[400, 800, 0],[5000, 25000, 0]...],
         0
     ],
     [
         [[1, 20],[21, 100],[140, 500],[1000, 2000],[2000, 10000]...],
-        [[10, 36],[45, 99],[100, 300],[400, 800],[5000, 25000]...],
+        [[10, 36, 0],[45, 99, 0],[100, 300, 0],[400, 800, 0],[5000, 25000, 0]...],
         1
     ],
     #...Configuration for Example 2 to Example 999
@@ -160,7 +160,7 @@ import qe_radar
 radar = qe_radar.DevSimulator("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 
 pulse = [0,10]
-measure = [3,7,1.0]
+measure = [3,7,0]
 
 print(radar.simulate(pulse, measure, 81))
 
@@ -195,9 +195,9 @@ import qe_radar
 
 radar = qe_radar.DevSimulator("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 
-configs = [[[[0,10],[10,15],[18,45]...], [[2,8,1.1],[14,15,0.32],[30,40,0.82]...], 0],
-            [[[0,10],[10,15],[18,45]...], [[2,8,1.1],[14,15,0.32],[30,40,0.82]...], 2],
-            [[[0,10],[10,15],[18,45]...], [[2,8,1.1],[14,15,0.32],[30,40,0.82]...], 1]...]
+configs = [[[[0,10],[10,15],[18,45]...], [[2,8,0],[14,15,0],[30,40,0]...], 0],
+            [[[0,10],[10,15],[18,45]...], [[2,8,0],[14,15,0],[30,40,0]...], 2],
+            [[[0,10],[10,15],[18,45]...], [[2,8,0],[14,15,0],[30,40,0]...], 1]...]
 
 print(radar.validate_config(configs))
 
@@ -257,7 +257,7 @@ import qe_radar
 radar = qe_radar.TestSimulator("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 
 pulse = [12,18]
-measure = [13,19,1.0]
+measure = [13,19,0]
 
 print(radar.simulate(pulse, measure, 34))
 
@@ -272,9 +272,9 @@ Submit results with estimates for all targets in the testing dataset and the con
 ```python
 import qe_radar
 
-configs = [[[[0,10],[10,15],[18,45]...], [[2,8,1.1],[14,15,0.32],[30,40,0.82]...], 0],
-            [[[0,10],[10,15],[18,45]...], [[2,8,1.1],[14,15,0.32],[30,40,0.82]...], 1],
-            [[[0,10],[10,15],[18,45]...], [[2,8,1.1],[14,15,0.32],[30,40,0.82]...], 2]...]
+configs = [[[[0,10],[10,15],[18,45]...], [[2,8,0],[14,15,0],[30,40,0]...], 0],
+            [[[0,10],[10,15],[18,45]...], [[2,8,0],[14,15,0],[30,40,0]...], 1],
+            [[[0,10],[10,15],[18,45]...], [[2,8,0],[14,15,0],[30,40,0]...], 2]...]
 
 estimates = [[0.00453748376016974, -0.02249823109292496, 153.73902434863788, 0],
         [0.0002964523714059984, -0.015549490574576096, 643.6452780943542, 1],
