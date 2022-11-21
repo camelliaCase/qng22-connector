@@ -67,7 +67,7 @@ Configuration for a pulse that runs from `2 us` to `13 us`, with a measurement w
         * Measurement | List: Length 3
             * Measure Start | Integer: 0-500000 us (microseconds)
             * Measure End | Integer: 0-500000 us (microseconds)
-            * Phase | Float: 0 or Pi/2 radians
+            * Phase | Float: 0 to 2*pi radians
     * Example Target | Integer: 0-999 
 * Estimates | List: Length 1000
     * Estimate | List: Length 4
