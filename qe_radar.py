@@ -1,6 +1,6 @@
 import requests
 
-QEC = "1.0" #Version number for challenge, can check with site for compatability,
+QEC = "1.1" #Version number for challenge, can check with site for compatability,
 # will provide appropriate error message when different to server to help communicate with teams that urgent updates are needed
 
 class DevSimulator (object):
@@ -29,7 +29,7 @@ class DevSimulator (object):
         
         #sends data to site, stores in variable r
         r = self.post(payload, str(example))
-        data = r.json
+        data = r.json()
         if r.status_code != 200:
             raise Exception(r.text)
         else:
@@ -106,7 +106,7 @@ class TestSimulator(object):
 
         #sends data to site, stores in variable r
         r = self.post(payload)
-        data = r.json
+        data = r.json()
 
         if r.status_code != 200:
             raise Exception(r.text)
@@ -117,7 +117,9 @@ class TestSimulator(object):
     def score(self, configs:list, estimates:int):
         payload = {"configurations":configs, "estimates":estimates}
         r = self.post(payload, "score")
-        data = r.json
+
+        data = r.json()
+        
         if r.status_code != 200:
             raise Exception(r.text)
         else:
