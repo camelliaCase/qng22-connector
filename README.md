@@ -153,7 +153,7 @@ sim.authentication("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 Send a radar configuration of pulse and measurement to the simulator and receive a normalised signal.
 
 #### **Example**:
-Running the development simulator against target `81` with a pulse that runs from `0 us` to `10 us` and measures from `3 us` to `7 us`.
+Running the development simulator against target `81` with a pulse that runs from `0 us` to `10 us` and measures from `3 us` to `7 us` adjusted by phase 0.
 ```python
 import qe_radar
 
@@ -250,7 +250,7 @@ sim.authentication("ecc80c9e-025d-4b01-b748-37d98d24f4fb")
 Send a radar configuration of pulse and measurement to the simulator and receive a normalised signal.
 
 #### **Example**:
-Running the test simulator against target `34` with a pulse that runs from `12 us` to `18 us` and measures from `13 us` to `19 us`
+Running the test simulator against target `34` with a pulse that runs from `12 us` to `18 us` and measures from `13 us` to `19 us` adjusted by phase 0.
 ```python
 import qe_radar
 
