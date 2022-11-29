@@ -1,5 +1,5 @@
 # Technical Manual 
-Version Number `1.0`
+Version Number `1.2`
 
 Welcome to the Quantum Next Generation 2022 Radar Challenge Beta Phase.
 

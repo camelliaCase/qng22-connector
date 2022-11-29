@@ -7,15 +7,15 @@ class DevSimulator (object):
 
     token = ""
 
-    def __init__(self, token: str = ""):
+    def __init__(self, token = ""):
         self.token = token
         self.URL = "https://sim.quantumnextgen.com.au/dev/"
 
-    def authentication(self, token: str):
+    def authentication(self, token):
         """Updates the access token used by the simulator connector"""
         self.token = token
 
-    def simulate(self, pulse: list[int], measure: list, example: int) -> float:
+    def simulate(self, pulse, measure, example):
         """
         Runs the provided configuration into the simulator and returns a normalised signal as a float
         
@@ -37,7 +37,7 @@ class DevSimulator (object):
             return float(r.text)
 
     #Directly calls dev_data() in qe_radar
-    def dataset(self, example) -> list:
+    def dataset(self, example):
         """Requests the Rabi, Detuning, and Time of Flight for the chosen example target."""
 
         #sends data to site, stores in variable r
@@ -50,7 +50,7 @@ class DevSimulator (object):
             #return to user the actual value of the request, removing header and online data that is unneeded
             return [data['Rabi'], data['Detuning'], data['T_Flight']]
 
-    def validate_config(self, configs: list) -> bool:
+    def validate_config(self, configs):
         
         payload = {"configuration":configs}
 
@@ -68,7 +68,7 @@ class DevSimulator (object):
                     print(i)
                 return False
 
-    def validate_estimate(self, estimates: list) -> bool:
+    def validate_estimate(self, estimates):
         
         payload = {"estimates":estimates}
 
@@ -93,14 +93,14 @@ class DevSimulator (object):
         return requests.get(self.URL+ref, headers={'Authentication': self.token, 'QeC':QEC})
 
 class TestSimulator(object):
-    def __init__(self, token: str = "") -> None:
+    def __init__(self, token = "") -> None:
         self.token = token
         self.URL = "https://sim.quantumnextgen.com.au/test/"
 
-    def authentication(self, token: str):
+    def authentication(self, token):
         self.token = token
 
-    def simulate(self, pulse: list[int], measure:list, example:int):
+    def simulate(self, pulse, measure, example):
         #creates JSON form data for HTTP request
         payload = {"pulse":pulse, "measurement":measure}
 
@@ -114,7 +114,7 @@ class TestSimulator(object):
         else:
             return float(r.text)
 
-    def score(self, configs:list, estimates:int):
+    def score(self, configs, estimates):
         payload = {"configurations":configs, "estimates":estimates}
         r = self.post(payload, "score")
 
