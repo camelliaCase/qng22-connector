@@ -12,18 +12,17 @@ class DevSimulator (object):
         self.URL = "https://sim.quantumnextgen.com.au/dev/"
 
     def authentication(self, token):
-        """Updates the access token used by the simulator connector"""
+        #Updates the access token used by the simulator connector"""
         self.token = token
 
     def simulate(self, pulse, measure, example):
-        """
-        Runs the provided configuration into the simulator and returns a normalised signal as a float
+        #Runs the provided configuration into the simulator and returns a normalised signal as a float
         
-        Keyword arguments:
-        pulse -- paired list with start and end of pulse in us (0-500,000)
-        measure -- list with start and end of the measurement window in us (0-500 000) and phase in radians
-        example -- id of example chosen for the simulation (0-999)
-        """
+        #Keyword arguments:
+        #pulse -- paired list with start and end of pulse in us (0-500,000)
+        #measure -- list with start and end of the measurement window in us (0-500 000) and phase in radians
+        #example -- id of example chosen for the simulation (0-999)
+        
         #creates JSON form data for HTTP request
         payload = {"pulse":pulse, "measurement":measure}
         
@@ -38,7 +37,7 @@ class DevSimulator (object):
 
     #Directly calls dev_data() in qe_radar
     def dataset(self, example):
-        """Requests the Rabi, Detuning, and Time of Flight for the chosen example target."""
+        #Requests the Rabi, Detuning, and Time of Flight for the chosen example target.
 
         #sends data to site, stores in variable r
         r = self.get(str(example))
