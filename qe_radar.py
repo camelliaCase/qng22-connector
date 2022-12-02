@@ -104,7 +104,7 @@ class TestSimulator(object):
         payload = {"pulse":pulse, "measurement":measure}
 
         #sends data to site, stores in variable r
-        r = self.post(payload)
+        r = self.post(payload, str(example))
         data = r.json()
 
         if r.status_code != 200:
