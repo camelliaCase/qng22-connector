@@ -379,5 +379,5 @@ test_radar = qe_radar.TestSimulator("[Replace this with your token]")
 
 print(test_radar.score(configs, estimates))
 
->>> [45, [1.2, 4.2, 0.2], [0.5, 2.1, 1.1]] # [ Score, [Precision (STD)], [Accuracy (Mean)] ]
+>>> [45, [1.2, 4.2, 0.2], [0.5, 2.1, 1.1]] # [ Score, [Precision (STD) (Rabi, Detuning, Time of Flight)], [Accuracy (Mean) (Rabi, Detuning, Time of Flight)] ]
 ```
