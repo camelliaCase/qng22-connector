@@ -1,6 +1,6 @@
 import requests
 
-QEC = "1.1" #Version number for challenge, can check with site for compatability,
+QEC = "1.5" #Version number for challenge, can check with site for compatability,
 # will provide appropriate error message when different to server to help communicate with teams that urgent updates are needed
 
 class DevSimulator (object):
@@ -35,6 +35,21 @@ class DevSimulator (object):
             #return to user the actual value of the request, removing header and online data that is unneeded
             return float(r.text)
 
+    def mass_simulate(self, configurations):
+        #Creates JSON form data for HTTP Request
+        payload = {"configurations":configurations}
+
+        #Sends data to site, stores in variable r
+        r = self.post(payload, "mass")
+
+        data = r.json()
+
+        if r.status_code != 200:
+            raise Exception(r.text)
+        #Returns to user the actual value of the request, removing header etc.
+        else:
+            return data['signals']
+
     #Directly calls dev_data() in qe_radar
     def dataset(self, example):
         #Requests the Rabi, Detuning, and Time of Flight for the chosen example target.
@@ -48,6 +63,16 @@ class DevSimulator (object):
         else:
             #return to user the actual value of the request, removing header and online data that is unneeded
             return [data['Rabi'], data['Detuning'], data['T_Flight']]
+
+    def mass_dataset(self):
+        
+        r = self.get("mass")
+        data = r.json()
+
+        if r.status_code != 200:
+            raise Exception(r.text)
+        else:
+            return data['targets']
 
     def validate_config(self, configs):
         
@@ -112,6 +137,21 @@ class TestSimulator(object):
         #return to user the actual value of the request, removing header and online data that is unneeded
         else:
             return float(r.text)
+
+    def mass_simulate(self, configurations):
+        #Creates JSON form data for HTTP Request
+        payload = {"configurations":configurations}
+
+        #Sends data to site, stores in variable r
+        r = self.post(payload, "mass")
+
+        data = r.json()
+
+        if r.status_code != 200:
+            raise Exception(r.text)
+        #Returns to user the actual value of the request, removing header etc.
+        else:
+            return data['signals']
 
     def score(self, configs, estimates):
         payload = {"configurations":configs, "estimates":estimates}
